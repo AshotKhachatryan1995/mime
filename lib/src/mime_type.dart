@@ -20,8 +20,10 @@ int get defaultMagicNumbersMaxLength => _globalResolver.magicNumbersMaxLength;
 /// a file have been saved using the wrong file-name extension. If less than
 /// [defaultMagicNumbersMaxLength] bytes was provided, some magic-numbers won't
 /// be matched against.
-String? lookupMimeType(String path, {List<int>? headerBytes}) =>
-    _globalResolver.lookup(path, headerBytes: headerBytes);
+String? lookupMimeType(String path,
+        {List<int>? headerBytes, bool? useExstension}) =>
+    _globalResolver.lookup(path,
+        headerBytes: headerBytes, useExstension: useExstension);
 
 /// Returns the extension for the given MIME type.
 ///
@@ -67,12 +69,12 @@ class MimeTypeResolver {
   /// though a file have been saved using the wrong file-name extension. If less
   /// than [magicNumbersMaxLength] bytes was provided, some magic-numbers won't
   /// be matched against.
-  String? lookup(String path, {List<int>? headerBytes}) {
+  String? lookup(String path, {List<int>? headerBytes, bool? useExstension}) {
     String? result;
     if (headerBytes != null) {
       result = _matchMagic(headerBytes, _magicNumbers);
       if (result != null) return result;
-      if (_useDefault) {
+      if ((useExstension == null || !useExstension) && _useDefault) {
         result = _matchMagic(headerBytes, initialMagicNumbers);
         if (result != null) return result;
       }
@@ -80,7 +82,7 @@ class MimeTypeResolver {
     final ext = _ext(path);
     result = _extensionMap[ext];
     if (result != null) return result;
-    if (_useDefault) {
+    if ((useExstension == null || !useExstension) && _useDefault) {
       result = defaultExtensionMap[ext];
       if (result != null) return result;
     }
