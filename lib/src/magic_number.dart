@@ -31,7 +31,6 @@ const int initialMagicNumbersMaxLength = 12;
 const List<MagicNumber> initialMagicNumbers = [
   MagicNumber('application/pdf', [0x25, 0x50, 0x44, 0x46]),
   MagicNumber('application/postscript', [0x25, 0x51]),
-
   MagicNumber(
       'application/msword', [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]),
 
@@ -39,7 +38,7 @@ const List<MagicNumber> initialMagicNumbers = [
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       [0x50, 0x4B, 0x03, 0x04]),
 
-  MagicNumber('video/quicktime', [0x6D, 0x6F, 0x6F, 0x76]),
+  MagicNumber('video/quicktime', [0x00]),
   MagicNumber('video/x-msvideo', [0x52, 0x49, 0x46, 0x46]),
 
   /// AIFF is based on the EA IFF 85 Standard for Interchange Format Files.
