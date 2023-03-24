@@ -71,6 +71,7 @@ class MimeTypeResolver {
   /// be matched against.
   String? lookup(String path, {List<int>? headerBytes, bool? useExstension}) {
     String? result;
+
     if (headerBytes != null) {
       result = _matchMagic(headerBytes, _magicNumbers);
       if (result != null) return result;
@@ -79,13 +80,15 @@ class MimeTypeResolver {
         if (result != null) return result;
       }
     }
-    final ext = _ext(path);
-    result = _extensionMap[ext];
-    if (result != null) return result;
-    if ((useExstension == null || !useExstension) && _useDefault) {
-      result = defaultExtensionMap[ext];
-      if (result != null) return result;
-    }
+
+    /// Comment for diabling extension check
+    // final ext = _ext(path);
+    // result = _extensionMap[ext];
+    // if (result != null) return result;
+    // if ((useExstension == null || !useExstension) && _useDefault) {
+    //   result = defaultExtensionMap[ext];
+    //   if (result != null) return result;
+    // }
     return null;
   }
 
@@ -106,6 +109,8 @@ class MimeTypeResolver {
     if (bytes.length > _magicNumbersMaxLength) {
       _magicNumbersMaxLength = bytes.length;
     }
+    print("test len ${_magicNumbers.length}");
+
     _magicNumbers.add(MagicNumber(mimeType, bytes, mask: mask));
   }
 
