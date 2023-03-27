@@ -20,10 +20,8 @@ int get defaultMagicNumbersMaxLength => _globalResolver.magicNumbersMaxLength;
 /// a file have been saved using the wrong file-name extension. If less than
 /// [defaultMagicNumbersMaxLength] bytes was provided, some magic-numbers won't
 /// be matched against.
-String? lookupMimeType(String path,
-        {List<int>? headerBytes, bool? useExstension}) =>
-    _globalResolver.lookup(path,
-        headerBytes: headerBytes, useExstension: useExstension);
+String? lookupMimeType(String path, {List<int>? headerBytes}) =>
+    _globalResolver.lookup(path, headerBytes: headerBytes);
 
 /// Returns the extension for the given MIME type.
 ///
@@ -69,27 +67,31 @@ class MimeTypeResolver {
   /// though a file have been saved using the wrong file-name extension. If less
   /// than [magicNumbersMaxLength] bytes was provided, some magic-numbers won't
   /// be matched against.
-  String? lookup(String path, {List<int>? headerBytes, bool? useExstension}) {
+  String? lookup(String path, {List<int>? headerBytes}) {
     String? result;
 
     if (headerBytes != null) {
       result = _matchMagic(headerBytes, _magicNumbers);
       if (result != null) return result;
-      if ((useExstension == null || !useExstension) && _useDefault) {
+      if (_useDefault) {
         result = _matchMagic(headerBytes, initialMagicNumbers);
+
+        if (result != null) {
+          /// Comment for diabling extension check
+          final ext = _ext(path);
+          var extRes = _extensionMap[ext];
+          if (extRes != null) return extRes;
+
+          if (_useDefault) {
+            extRes = defaultExtensionMap[ext];
+            if (extRes != null) return extRes;
+          }
+          return result;
+        }
+
         if (result != null) return result;
       }
     }
-
-    /// Comment for diabling extension check
-    // final ext = _ext(path);
-    // result = _extensionMap[ext];
-    // if (result != null) return result;
-    // if ((useExstension == null || !useExstension) && _useDefault) {
-    //   result = defaultExtensionMap[ext];
-    //   if (result != null) return result;
-    // }
-    return null;
   }
 
   /// Add a new MIME-type mapping to the [MimeTypeResolver]. If the [extension]
