@@ -38,6 +38,9 @@ const List<MagicNumber> initialMagicNumbers = [
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       [0x50, 0x4B, 0x03, 0x04]),
 
+  MagicNumber('application/java-archive',
+      [0x50, 0x4B, 0x03, 0x04, 0x14, 0x00, 0x08, 0x00, 0x08, 0x00]),
+
   MagicNumber('video/quicktime', [0x00]),
   MagicNumber('video/x-msvideo', [0x52, 0x49, 0x46, 0x46]),
 
